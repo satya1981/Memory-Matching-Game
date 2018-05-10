@@ -1,4 +1,4 @@
-# Memory-game
+# Memory-Matching-game
 
 Udacity-Front-End-Web-Developer-Nanodegree-Project-Memory-Game-in-Javascript
 Memory Game
