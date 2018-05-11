@@ -3,16 +3,16 @@ const shapes = ['code', 'bug', 'user-secret', 'terminal', 'globe', 'laptop', 'se
 let State = function () {
     // this keeps a list of the cards we're currently looking at
     // that may or may not have matched as well as moves and matches
-    this.allCards = [];
+    this.allcards = [];
     this.openCards = [];
     this.moves = 0;
-    this.removedStars = 0;
+    this.removedstars = 0;
     this.matches = 0;
     this.seconds = 0;
     this.intervalObj = {};
 };
 
-State.prototype.incrementMoves = function() {
+state.prototype.incrementMoves = function() {
     this.moves++;
 };
 
@@ -20,38 +20,38 @@ State.prototype.removeStar = function() {
     this.removedStars++;
 };
 
-State.prototype.addCard = function(card) {
+state.prototype.addCard = function(card) {
     this.allCards.push(card);
 };
 
-State.prototype.addOpenCard = function(card) {
-    this.incrementMoves();
+state.prototype.addopenCard = function(card) {
+    this.incrementmoves();
     // after 35 moves and 45 moves we remove stars
     switch (this.moves) {
         case 35:
-            this.removeStar();
+            this.removestar();
             break;
         case 45:
-            this.removeStar();
+            this.removestar();
             break;
     }
-    this.openCards.push(card);
+    this.opencards.push(card);
 };
 
-State.prototype.clearOpenCards = function() {
-    this.openCards = [];
+state.prototype.clearopencards = function() {
+    this.opencards = [];
 };
 
-State.prototype.incrementSeconds = function() {
+state.prototype.incrementseconds = function() {
     this.seconds++;
 };
 
-State.prototype.reset = function() {
+state.prototype.reset = function() {
     // reset our state
-    this.allCards = [];
-    this.openCards = [];
+    this.allcards = [];
+    this.opencards = [];
     this.moves = 0;
-    this.removedStars = 0;
+    this.removedstars = 0;
     this.matches = 0;
     this.seconds = 0;
     this.intervalObj = {};
@@ -71,29 +71,30 @@ function shuffle(array) {
 
     return array;
 }
-
-function toggleCardClicks(state, toggle) {
-    // enable or disable click-ability of all cards
-    if (toggle === true) {
-        state.allCards.map(card => { toggleCardClick(state, true, card)})
-    } else if (toggle === false) {
-        state.allCards.map(card => { toggleCardClick(state, false, card)})
+function togglecardclicks(state,toggle){
+  //enable or disable click-ability of all cards
+  if (toggle === true){
+    state.all.cards.map(card) => { togglecardclick(state, true, card)};
+  } 
+    else if(toggle === false)
+   {
+   state.all.cards.map(card) => { togglecardclick(state, false, card)};
     }
 }
 
-function toggleCardClick(state, toggle, card) {
+function togglecardclick(state, toggle, card) {
     // enable or disable click-ability of single card
     if (toggle === true) {
         $(card).unbind();
         $(card).click(() => {
-            turnCard(state, card);
+            turncard(state, card);
         });
     } else if (toggle === false) {
         $(card).off('click');
     }
 }
 
-function clearBoard(cards) {
+function clearboard(cards) {
     for (const card of cards) {
         // clears out classes other than card
         $(card).attr('class', 'card');
@@ -104,8 +105,8 @@ function clearBoard(cards) {
 
 function checkForMatch(state) {
     if (state.openCards.length === 2) {
-        const card1 = $(state.openCards[0]);
-        const card2 = $(state.openCards[1]);
+        const card1 = $(state.opencards[0]);
+        const card2 = $(state.opencards[1]);
         // check if there is a match
         if (card1.data('shape') === card2.data('shape')) {
             markMatch(state);
@@ -116,8 +117,8 @@ function checkForMatch(state) {
 }
 
 function markMatch(state) {
-    state.openCards.map(card => { $(card).addClass('match')});
-    state.clearOpenCards();
+          state.opencards.map(card => {$(card).addclass('match'))};
+    state.clearopencards();
     state.matches++;
     // game has been won!
     if (state.matches === 8) {
@@ -126,18 +127,18 @@ function markMatch(state) {
 }
 
 function nonMatch(state) {
-    toggleCardClicks(state, false);
+    togglecardclicks(state, false);
     setTimeout(() => {
-        state.openCards.map(card => { $(card).removeClass('open show')});
-        state.clearOpenCards();
-        toggleCardClicks(state, true)
+        state.opencards.map(card => { $ card.removeclass('open show'))};
+        state.clearopencards();
+        togglecardclicks(state, true);
     }, 1000);
 }
 
-function turnCard(state, card) {
-    state.addOpenCard(card);
-    $(card).addClass('open show');
-    toggleCardClick(state, false, card);
+function turncard(state, card) {
+    state.addopencard(card);
+    $(card).addclass('open show');
+    togglecardclick(state, false, card);
 
     // show the number of moves we've made thus far
     $('#move-count').text(state.moves);
@@ -146,19 +147,19 @@ function turnCard(state, card) {
         startTimer(state);
     }
 
-    showStars(state, $('.score-panel-item').children('.stars')[0]);
+    showstars(state, $('.score-panel-item').children('.stars')[0]);
 
     checkForMatch(state);
 }
 
-function showStars(state, starParentEl) {
+function showstars(state, starParentEl) {
     const stars = $(starParentEl).find('.fa-star');
-    for (let i = 0; i < state.removedStars; i++ ) {
+    for (let i = 0; i < state.removedstars; i++ ) {
         $(stars[i]).css('display', 'none');
     }
 }
 
-function resetStars(starParentEl) {
+function resetstars(starParentEl) {
     const stars = $(starParentEl).find('.fa-star');
     for (const star of stars) {
         $(stars).css('display', 'inline-block');
@@ -175,7 +176,7 @@ function startTimer(state) {
     state.intervalObj = setInterval(() => {
         state.incrementSeconds();
         $('.seconds-passed').text(state.seconds);
-    }, 1000)
+    }, 1000);
 }
 
 function stopTimer(state) {
@@ -195,7 +196,7 @@ function gameOver(state) {
         $('.modal-message').text(messageText);
     }
 
-    if (state.removedStars === 0) {
+    if (state.removedstars === 0) {
         buildMessage('Excellent!', 'I wasn\'t sure at first but I\'m certain now, you\'re a matching master.');
     } else if (state.removedStars === 1) {
         buildMessage('Well done!', 'I\'m impressed. With a few more matches going your way, 3 stars will be yours!');
@@ -206,7 +207,7 @@ function gameOver(state) {
     $('#modal-moves').text(state.moves);
     $('#modal-seconds').text(state.seconds);
 
-    showStars(state, $('.modal-content').children('.modal-stars')[0]);
+    showstars(state, $('.modal-content').children('.modal-stars')[0]);
 
     $('#modal-again-no').click(() => {
         modal.css('display', 'none');
@@ -249,7 +250,7 @@ function buildBoard(state) {
     addShapes(cards, cardShapes);
 
     for (const card of cards) {
-        state.addCard(card);
+        state.addcard(card);
         $(card).click(() => {
             turnCard(state, card);
         });
@@ -266,7 +267,6 @@ $(() => {
     buildBoard(state);
 
     // Allows for new games to be restarted at any time
-    $('i.fa-repeat').click(() => { buildBoard(state) });
+    $('i.fa-repeat').click(() => buildBoard(state) );
 
 });
-
